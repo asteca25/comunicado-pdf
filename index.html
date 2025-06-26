@@ -100,14 +100,13 @@
       const link = document.getElementById("link").value;
       const hoy = new Date();
       const dia = String(hoy.getDate()).padStart(2, '0');
-      const mes = String(hoy.getMonth() + 1).padStart(2, '0'); // ¡Ojo! los meses van de 0 a 11
+      const mes = String(hoy.getMonth() + 1).padStart(2, '0');
       const anio = hoy.getFullYear();
       const fecha = `${dia}/${mes}/${anio}`;
 
-
       const contenido = `
       <div class="contenido-comunicado">
-      <div style="display: flex; gap: 20px; align-items: center; flex-wrap: wrap; margin-bottom: 20px;">
+        <div style="display: flex; gap: 20px; align-items: center; flex-wrap: wrap; margin-bottom: 20px;">
           <img src="img/Imagen1.png" style="width: 150px;">
           <img src="img/TEXTOENCABEZADO.png" style="width: 310px;">
         </div>
@@ -119,7 +118,7 @@
 
         <p>En el caso desee renovar, se solicita comunicarse al teléfono <strong>${telefono}</strong> o al correo <strong>${correo}</strong>.</p>
 
-        <p>Lo invitamos a llenar el siguiente cuestionario para calificar nuestro servicio: <a href="${link}">${link}</a></p>
+        <p>Lo invitamos a llenar el siguiente cuestionario para calificar nuestro servicio: <a href="${link}" target="_blank">${link}</a></p>
 
         <p style="text-align:right;margin-top:40px;">Fecha: ${fecha}</p>
       </div>
@@ -135,7 +134,8 @@
           filename: `comunicado_${codigo}.pdf`,
           image: { type: 'jpeg', quality: 0.98 },
           html2canvas: { scale: 2 },
-          jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+          jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+          enableLinks: true // 👈 ¡Esto activa los hipervínculos!
         };
         html2pdf().from(preview).set(opt).save();
       }, 100);
