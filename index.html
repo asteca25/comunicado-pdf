@@ -118,7 +118,20 @@
 
         <p>En el caso desee renovar, se solicita comunicarse al teléfono <strong>${telefono}</strong> o al correo <strong>${correo}</strong>.</p>
 
-        <p>Lo invitamos a llenar el siguiente cuestionario para calificar nuestro servicio: <a href="${link}" target="_blank">${link}</a></p>
+        <p style="position: relative;">
+  Lo invitamos a llenar el siguiente cuestionario para calificar nuestro servicio:
+  <span style="display:inline-block; position: relative;">
+    ${link}
+    <a href="${link}" target="_blank" style="
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 1;
+    "></a>
+  </span>
+</p>
 
         <p style="text-align:right;margin-top:40px;">Fecha: ${fecha}</p>
       </div>
