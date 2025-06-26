@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Comunicado Mantenimiento</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #bfcbfe, #fbf6ff);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+
+    .container {
+      background: white;
+      border-radius: 15px;
+      padding: 40px 30px;
+      max-width: 400px;
+      width: 100%;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+      text-align: center;
+    }
+
+    input,
+    select {
+      margin-bottom: 15px;
+      width: 100%;
+      padding: 12px 7px;
+      font-size: 15px;
+      border-radius: 20px;
+      border: 1px solid #ccc;
+      outline: none;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      border: none;
+      border-radius: 25px;
+      background: linear-gradient(to right, #667eea, #764ba2);
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    #comunicadoPreview {
+      width: 210mm;
+      background: white;
+      font-size: 14px;
+      padding: 0;
+      margin: 0 auto;
+      display: none;
+    }
+
+    .contenido-comunicado {
+      width: 100%;
+      max-width: 180mm;
+      margin: 0 auto;
+      padding: 20mm;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', sans-serif;
+      color: black;
+      line-height: 1.6;
+      text-align: justify;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h2>Generar Comunicado</h2>
+    <select id="estado">
+      <option value="CONCLUIDO">CONCLUIDO</option>
+      <option value="SUSPENDIDO">SUSPENDIDO</option>
+    </select>
+    <input type="text" id="codigo" placeholder="Código del ascensor" />
+    <input type="text" id="ubicacion" placeholder="Ubicación" />
+    <input type="text" id="telefono" placeholder="Teléfono" maxlength="9" />
+    <input type="email" id="correo" placeholder="Correo" />
+    <input type="text" id="link" value="https://forms.office.com/r/fwZiFhEVsd" />
+    <button onclick="generarComunicado()">Generar y Descargar PDF</button>
+  </div>
+
+  <div id="comunicadoPreview"></div>
+
+  <script>
+    function generarComunicado() {
+      const estado = document.getElementById("estado").value;
+      const codigo = document.getElementById("codigo").value || "SIN-CODIGO";
+      const ubicacion = document.getElementById("ubicacion").value;
+      const telefono = document.getElementById("telefono").value;
+      const correo = document.getElementById("correo").value;
+      const link = document.getElementById("link").value;
+      const hoy = new Date();
+      const dia = String(hoy.getDate()).padStart(2, '0');
+      const mes = String(hoy.getMonth() + 1).padStart(2, '0'); // ¡Ojo! los meses van de 0 a 11
+      const anio = hoy.getFullYear();
+      const fecha = `${dia}/${mes}/${anio}`;
+
+
+      const contenido = `
+      <div class="contenido-comunicado">
+      <div style="display: flex; gap: 20px; align-items: center; flex-wrap: wrap; margin-bottom: 20px;">
+          <img src="img/Imagen1.png" style="width: 150px;">
+          <img src="img/TEXTOENCABEZADO.png" style="width: 310px;">
+        </div>
+
+        <h2 style="text-align:center; margin-bottom: 5px;">COMUNICADO</h2>
+        <h3 style="text-align:center; margin-top:0; margin-bottom:20px">MANTENIMIENTO ${estado}</h3>
+
+        <p>Ascensores Asteca informa a los usuarios que su servicio de mantenimiento preventivo y atención de emergencias del ascensor <strong>${codigo}</strong>, ubicado en <strong>${ubicacion}</strong>, se encuentra <strong>${estado}</strong>.</p>
+
+        <p>En el caso desee renovar, se solicita comunicarse al teléfono <strong>${telefono}</strong> o al correo <strong>${correo}</strong>.</p>
+
+        <p>Lo invitamos a llenar el siguiente cuestionario para calificar nuestro servicio: <a href="${link}">${link}</a></p>
+
+        <p style="text-align:right;margin-top:40px;">Fecha: ${fecha}</p>
+      </div>
+      `;
+
+      const preview = document.getElementById("comunicadoPreview");
+      preview.innerHTML = contenido;
+      preview.style.display = "block";
+
+      setTimeout(() => {
+        const opt = {
+          margin: 0,
+          filename: `comunicado_${codigo}.pdf`,
+          image: { type: 'jpeg', quality: 0.98 },
+          html2canvas: { scale: 2 },
+          jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        };
+        html2pdf().from(preview).set(opt).save();
+      }, 100);
+    }
+  </script>
+</body>
+
+</html>
